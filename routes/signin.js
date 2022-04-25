@@ -13,5 +13,34 @@ router.get('/', function (req, res, next) {
 // (1)一致したらログイン成功とし、todo作成画面にリダイレクトさせる。
 // (2)一致しなければ、ログイン失敗とし、サインイン画面にリダイレクトさせる。
 // (3)ユーザー名がなければ、ログイン失敗とし、サインイン画面にリダイレクトさせる。
+router.post('/', function(req, res, next) {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    console.log(username);
+    console.log(password);
+
+    knex("users")
+        .where({name: username, password: password})
+        .select("*")
+        .then(function(result){
+            if(result.length === 0){
+                res.render("signin", {
+                    title: "Sign in",
+                    errorMessage: "ユーザーが見つかりません。"
+                });    
+            } else {
+                res.redirect("/");
+            }
+        })
+        .catch(function(err) {
+            console.error(err);
+            res.render("signin", {
+                title: "Sign in",
+                errorMessage: err.errorMessage,
+                isAuth: false
+            });
+        });
+});
 
 module.exports = router;

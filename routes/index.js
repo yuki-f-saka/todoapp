@@ -15,20 +15,25 @@ router.get('/', function (req, res, next) {
       res.render('index', {
         title: 'ToDo App',
         todos: results,
+        isAuth: isAuth,
       });
     })
     .catch(function (err) {
       console.error(err);
       res.render('index', {
         title: 'ToDo App',
+        isAuth: isAuth,
       });
     });
 });
 
 router.post('/', function (req, res, next) {
   const todo = req.body.add;
+  const userId = req.session.userid;
+  const isAuth = Boolean(userId);
+
   knex("tasks")
-    .insert({user_id: 1, content: todo})
+    .insert({user_id: userId, content: todo})
     .then(function () {
       res.redirect('/')
     })
@@ -36,6 +41,7 @@ router.post('/', function (req, res, next) {
       console.error(err);
       res.render('index', {
         title: 'ToDo App',
+        isAuth: isAuth,
       });
     });
 });

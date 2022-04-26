@@ -8,11 +8,6 @@ router.get('/', function (req, res, next) {
   });
 });
 
-// サインイン画面で入力された、ユーザー名とパスワードをrequestから取得し、
-// ユーザー名でusersテーブルを検索して、パスワードが入力された値と一致するかを確認する。
-// (1)一致したらログイン成功とし、todo作成画面にリダイレクトさせる。
-// (2)一致しなければ、ログイン失敗とし、サインイン画面にリダイレクトさせる。
-// (3)ユーザー名がなければ、ログイン失敗とし、サインイン画面にリダイレクトさせる。
 router.post('/', function(req, res, next) {
     const username = req.body.username;
     const password = req.body.password;
@@ -30,6 +25,7 @@ router.post('/', function(req, res, next) {
                     errorMessage: "ユーザーが見つかりません。"
                 });    
             } else {
+                req.session.userid = result[0].id;
                 res.redirect("/");
             }
         })

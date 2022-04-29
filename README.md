@@ -1,8 +1,8 @@
 # Name
 
-ToDo app
+TodoApp
 
-Node.jsの勉強用にToDo管理できるようなアプリケーションを作成しました。
+Node.jsの勉強用にToDo管理できるようなアプリケーションを作成しました。Expressを使用しています。
 
 # Demo
 

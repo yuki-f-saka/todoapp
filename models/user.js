@@ -7,8 +7,6 @@ async function findById(userId) {
   if (user === null) {
     throw new Error("User not found")
   }
-//   console.log(user);
-//   console.log(...user);
   return {...user};
 }
 
@@ -19,7 +17,6 @@ async function where(condition) {
       if (results.length === 0) {
         return null;
       }
-      console.log(results[0]);
       return results[0];
     });
 }

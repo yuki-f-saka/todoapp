@@ -11,7 +11,6 @@ router.get('/', function (req, res, next) {
       .where({user_id: userId})
       .select("*")
       .then(function (results) {
-        console.log(results);
         res.render('index', {
           title: 'ToDo App',
           todos: results,

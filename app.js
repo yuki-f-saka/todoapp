@@ -30,9 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // authorization
 require("./config/passport")(app);
 
-// const passport = require("./config/passport");
-// passport(app); みたいな書き方でもいい。
-
 // router
 app.use('/', require("./routes"));
 

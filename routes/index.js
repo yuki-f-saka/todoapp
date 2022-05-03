@@ -4,33 +4,39 @@ const knex = require('../db/knex');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  const userId = req.session.userid;
-  const isAuth = Boolean(userId);
-  // console.log(`isAuth: ${isAuth}`);
-
-  knex("tasks")
-    .select("*")
-    .then(function (results) {
-      console.log(results);
-      res.render('index', {
-        title: 'ToDo App',
-        todos: results,
-        isAuth: isAuth,
+  const isAuth = req.isAuthenticated();
+  if(isAuth){
+    const userId = req.user.id;
+    knex("tasks")
+      .where({user_id: userId})
+      .select("*")
+      .then(function (results) {
+        console.log(results);
+        res.render('index', {
+          title: 'ToDo App',
+          todos: results,
+          isAuth: isAuth,
+        });
+      })
+      .catch(function (err) {
+        console.error(err);
+        res.render('index', {
+          title: 'ToDo App',
+          isAuth: isAuth,
+        });
       });
-    })
-    .catch(function (err) {
-      console.error(err);
-      res.render('index', {
-        title: 'ToDo App',
-        isAuth: isAuth,
-      });
+  }else{
+    res.render('index', {
+      title: 'ToDo App',
+      isAuth: isAuth,
     });
+  }
 });
 
 router.post('/', function (req, res, next) {
   const todo = req.body.add;
-  const userId = req.session.userid;
-  const isAuth = Boolean(userId);
+  const isAuth = req.isAuthenticated();
+  const userId = req.user.id;
 
   knex("tasks")
     .insert({user_id: userId, content: todo})
@@ -42,6 +48,7 @@ router.post('/', function (req, res, next) {
       res.render('index', {
         title: 'ToDo App',
         isAuth: isAuth,
+        errorMessage: [err.sqlMessage],
       });
     });
 });
